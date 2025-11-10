@@ -29,7 +29,6 @@ export function ImagesToPDFDialog({ open, onOpenChange, onConfirm, fileCount }: 
     orientation: 'portrait',
     margin: 20,
     quality: 90,
-    compression: 'medium',
     fitToPage: true,
     centerImages: true,
     addPageNumbers: false,
@@ -47,14 +46,8 @@ export function ImagesToPDFDialog({ open, onOpenChange, onConfirm, fileCount }: 
   ]
 
   const orientations = [
-    { value: 'portrait', label: 'Portrait' },
-    { value: 'landscape', label: 'Landscape' }
-  ]
-
-  const compressionLevels = [
-    { value: 'low', label: 'Low (Larger file, better quality)' },
-    { value: 'medium', label: 'Medium (Balanced)' },
-    { value: 'high', label: 'High (Smaller file, lower quality)' }
+    { value: 'portrait', label: '📄 Portrait' },
+    { value: 'landscape', label: '📃 Landscape' }
   ]
 
   const handleConfirm = () => {
@@ -68,7 +61,6 @@ export function ImagesToPDFDialog({ open, onOpenChange, onConfirm, fileCount }: 
       orientation: 'portrait',
       margin: 20,
       quality: 90,
-      compression: 'medium',
       fitToPage: true,
       centerImages: true,
       addPageNumbers: false,
@@ -79,28 +71,35 @@ export function ImagesToPDFDialog({ open, onOpenChange, onConfirm, fileCount }: 
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px] max-h-[85vh] overflow-y-auto">
+      <DialogContent className="sm:max-w-[500px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl font-bold flex items-center gap-2">
             <Image className="h-5 w-5 text-primary" />
-            Convert Images to PDF
+            Images to PDF Converter
           </DialogTitle>
-          <DialogDescription>
-            Converting {fileCount} image{fileCount > 1 ? 's' : ''} to PDF
+          <DialogDescription className="text-base">
+            Convert <span className="font-semibold text-primary">{fileCount}</span> image{fileCount > 1 ? 's' : ''} into a single PDF document
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-3.5">
-          {/* Page Settings */}
+        <div className="space-y-4 py-2">
+          {/* Quick Tip */}
+          <div className="p-3 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <p className="text-sm text-blue-700 dark:text-blue-300">
+              <strong>💡 Tip:</strong> Images will maintain their aspect ratio and be optimized for the selected page size
+            </p>
+          </div>
+
+          {/* Page Configuration */}
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
-                <Label htmlFor="pageSize" className="text-sm font-medium">Page Size</Label>
+                <Label htmlFor="pageSize" className="text-sm font-medium">📐 Page Size</Label>
                 <Select
                   value={conversionData.pageSize}
                   onValueChange={(value) => setConversionData(prev => ({ ...prev, pageSize: value }))}
                 >
-                  <SelectTrigger id="pageSize" className="h-9">
+                  <SelectTrigger id="pageSize" className="h-10">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -114,12 +113,12 @@ export function ImagesToPDFDialog({ open, onOpenChange, onConfirm, fileCount }: 
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="orientation" className="text-sm font-medium">Orientation</Label>
+                <Label htmlFor="orientation" className="text-sm font-medium">🔄 Orientation</Label>
                 <Select
                   value={conversionData.orientation}
                   onValueChange={(value) => setConversionData(prev => ({ ...prev, orientation: value }))}
                 >
-                  <SelectTrigger id="orientation" className="h-9">
+                  <SelectTrigger id="orientation" className="h-10">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -133,64 +132,51 @@ export function ImagesToPDFDialog({ open, onOpenChange, onConfirm, fileCount }: 
               </div>
             </div>
 
+            {/* Sliders */}
             <div className="grid grid-cols-2 gap-3">
               <div className="space-y-2">
                 <Label htmlFor="margin" className="text-sm font-medium flex items-center justify-between">
-                  Margin
-                  <span className="text-xs text-muted-foreground">{conversionData.margin}mm</span>
+                  📏 Margin
+                  <span className="text-xs font-normal text-muted-foreground">{conversionData.margin}px</span>
                 </Label>
-                <Input
+                <input
                   id="margin"
                   type="range"
                   min="0"
                   max="50"
                   value={conversionData.margin}
-                  onChange={(e) => setConversionData(prev => ({ ...prev, margin: parseInt(e.target.value) || 20 }))}
-                  className="w-full"
+                  onChange={(e) => setConversionData(prev => ({ ...prev, margin: parseInt(e.target.value) }))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
                 />
               </div>
 
               <div className="space-y-2">
                 <Label htmlFor="quality" className="text-sm font-medium flex items-center justify-between">
-                  Quality
-                  <span className="text-xs text-muted-foreground">{conversionData.quality}%</span>
+                  ✨ Quality
+                  <span className="text-xs font-normal text-muted-foreground">{conversionData.quality}%</span>
                 </Label>
-                <Input
+                <input
                   id="quality"
                   type="range"
-                  min="10"
+                  min="50"
                   max="100"
                   value={conversionData.quality}
-                  onChange={(e) => setConversionData(prev => ({ ...prev, quality: parseInt(e.target.value) || 90 }))}
-                  className="w-full"
+                  onChange={(e) => setConversionData(prev => ({ ...prev, quality: parseInt(e.target.value) }))}
+                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"
                 />
               </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="compression" className="text-sm font-medium">Compression</Label>
-              <Select
-                value={conversionData.compression}
-                onValueChange={(value) => setConversionData(prev => ({ ...prev, compression: value }))}
-              >
-                <SelectTrigger id="compression" className="h-9">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {compressionLevels.map((level) => (
-                    <SelectItem key={level.value} value={level.value}>
-                      {level.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </div>
           </div>
 
           {/* Layout Options */}
           <div className="space-y-2.5 border-t pt-3">
-            <div className="flex items-center justify-between">
-              <Label htmlFor="fitToPage" className="text-sm font-medium">Fit Images to Page</Label>
+            <Label className="text-sm font-medium text-muted-foreground">Layout Options</Label>
+            
+            <div className="flex items-center justify-between py-1.5 px-3 rounded-md hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+              <Label htmlFor="fitToPage" className="text-sm cursor-pointer flex items-center gap-2">
+                <span>📐</span>
+                <span>Fit Images to Page</span>
+              </Label>
               <Switch
                 id="fitToPage"
                 checked={conversionData.fitToPage}
@@ -198,8 +184,11 @@ export function ImagesToPDFDialog({ open, onOpenChange, onConfirm, fileCount }: 
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="centerImages" className="text-sm font-medium">Center Images</Label>
+            <div className="flex items-center justify-between py-1.5 px-3 rounded-md hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+              <Label htmlFor="centerImages" className="text-sm cursor-pointer flex items-center gap-2">
+                <span>⊙</span>
+                <span>Center Images</span>
+              </Label>
               <Switch
                 id="centerImages"
                 checked={conversionData.centerImages}
@@ -207,8 +196,11 @@ export function ImagesToPDFDialog({ open, onOpenChange, onConfirm, fileCount }: 
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="addPageNumbers" className="text-sm font-medium">Add Page Numbers</Label>
+            <div className="flex items-center justify-between py-1.5 px-3 rounded-md hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+              <Label htmlFor="addPageNumbers" className="text-sm cursor-pointer flex items-center gap-2">
+                <span>#️⃣</span>
+                <span>Add Page Numbers</span>
+              </Label>
               <Switch
                 id="addPageNumbers"
                 checked={conversionData.addPageNumbers}
@@ -216,8 +208,11 @@ export function ImagesToPDFDialog({ open, onOpenChange, onConfirm, fileCount }: 
               />
             </div>
 
-            <div className="flex items-center justify-between">
-              <Label htmlFor="addTimestamp" className="text-sm font-medium">Add Timestamp</Label>
+            <div className="flex items-center justify-between py-1.5 px-3 rounded-md hover:bg-slate-50 dark:hover:bg-slate-900 transition-colors">
+              <Label htmlFor="addTimestamp" className="text-sm cursor-pointer flex items-center gap-2">
+                <span>🕐</span>
+                <span>Add Timestamp</span>
+              </Label>
               <Switch
                 id="addTimestamp"
                 checked={conversionData.addTimestamp}
@@ -228,27 +223,45 @@ export function ImagesToPDFDialog({ open, onOpenChange, onConfirm, fileCount }: 
 
           {/* Output Name */}
           <div className="space-y-2 border-t pt-3">
-            <Label htmlFor="outputName" className="text-sm font-medium">Custom Filename (optional)</Label>
+            <Label htmlFor="outputName" className="text-sm font-medium flex items-center gap-2">
+              <span>📝</span>
+              <span>Custom Filename (optional)</span>
+            </Label>
             <Input
               id="outputName"
-              placeholder="Leave empty for default"
+              placeholder="my-document.pdf"
               value={conversionData.outputName}
               onChange={(e) => setConversionData(prev => ({ ...prev, outputName: e.target.value }))}
-              className="h-9"
+              className="h-10"
             />
+            <p className="text-xs text-muted-foreground">Leave empty to use default filename</p>
           </div>
         </div>
 
-        <DialogFooter className="flex justify-between mt-4">
-          <Button variant="outline" size="sm" onClick={resetForm}>
-            Reset
+        <DialogFooter className="flex flex-row justify-between items-center gap-2 mt-4 pt-4 border-t">
+          <Button 
+            variant="outline" 
+            size="sm" 
+            onClick={resetForm} 
+            className="hover:bg-slate-100 dark:hover:bg-slate-800"
+          >
+            🔄 Reset
           </Button>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              onClick={() => onOpenChange(false)}
+            >
               Cancel
             </Button>
-            <Button size="sm" onClick={handleConfirm} className="bg-primary hover:bg-primary/90">
-              Convert to PDF
+            <Button 
+              size="sm" 
+              onClick={handleConfirm} 
+              className="bg-primary hover:bg-primary/90 font-semibold px-6"
+              disabled={fileCount === 0}
+            >
+              📄 Convert to PDF
             </Button>
           </div>
         </DialogFooter>

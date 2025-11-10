@@ -546,6 +546,14 @@ export function PDFTools({ files, onFilesChange, onWatermarkChange, onToolSelect
   const handleImagesToPdfConfirm = async (conversionData: any) => {
     const imageFiles = files.filter(file => file.type.startsWith('image/'))
     setActiveTool('jpg-to-pdf')
+    
+    // Show processing toast
+    toast({
+      title: "🔄 Converting Images to PDF...",
+      description: `Processing ${imageFiles.length} image${imageFiles.length > 1 ? 's' : ''}...`,
+      duration: 3000,
+    })
+    
     const formData = new FormData()
     imageFiles.forEach(file => formData.append('files', file))
     
@@ -556,7 +564,7 @@ export function PDFTools({ files, onFilesChange, onWatermarkChange, onToolSelect
       }
     })
     
-    await handleApiCall('jpg-to-pdf', formData, 'converted.pdf')
+    await handleApiCall('jpg-to-pdf', formData, conversionData.outputName || 'images-to-pdf.pdf')
   }
 
   const handlePdfToJpg = async () => {
@@ -786,7 +794,7 @@ export function PDFTools({ files, onFilesChange, onWatermarkChange, onToolSelect
       description: 'Convert images to PDF',
       icon: Image,
       onClick: handleJpgToPdf,
-      requiresMultiple: true,
+      requiresMultiple: false, // Allow single or multiple images
       fileType: 'image'
     },
     {
@@ -817,6 +825,30 @@ export function PDFTools({ files, onFilesChange, onWatermarkChange, onToolSelect
       )}
 
       <div>
+        {/* Helper message for image files */}
+        {files.length > 0 && files.every(f => f.type.startsWith('image/')) && (
+          <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+            <p className="text-sm text-blue-700 dark:text-blue-300 flex items-center gap-2">
+              <Image className="h-4 w-4" />
+              <span>
+                <strong>📸 Image files detected!</strong> Use <strong>"Images to PDF"</strong> to convert {files.length} image{files.length > 1 ? 's' : ''} to a PDF document.
+              </span>
+            </p>
+          </div>
+        )}
+        
+        {/* Helper message for PDF files */}
+        {files.length > 0 && files.every(f => f.type === 'application/pdf') && (
+          <div className="mb-4 p-3 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
+            <p className="text-sm text-green-700 dark:text-green-300 flex items-center gap-2">
+              <FileText className="h-4 w-4" />
+              <span>
+                <strong>📄 PDF files detected!</strong> Select a tool below to merge, split, compress, or edit your PDF{files.length > 1 ? 's' : ''}.
+              </span>
+            </p>
+          </div>
+        )}
+        
         <div className="grid grid-cols-1 gap-3">
             {tools.map((tool) => {
               const Icon = tool.icon
