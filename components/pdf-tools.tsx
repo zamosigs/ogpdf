@@ -184,8 +184,15 @@ export function PDFTools({ files, onFilesChange, onWatermarkChange, onToolSelect
       })
 
       if (!response.ok) {
-        const error = await response.json()
-        throw new Error(error.error || 'Operation failed')
+        let errorMessage = 'Operation failed'
+        try {
+          const error = await response.json()
+          errorMessage = error.error || errorMessage
+        } catch (e) {
+          // If response is not JSON, use status text
+          errorMessage = `${response.status}: ${response.statusText || 'Operation failed'}`
+        }
+        throw new Error(errorMessage)
       }
 
       // Simulate progress with real-time updates
@@ -204,6 +211,7 @@ export function PDFTools({ files, onFilesChange, onWatermarkChange, onToolSelect
         description: "File processed and downloaded successfully!",
       })
     } catch (error) {
+      console.error('API call error:', error)
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Operation failed",
@@ -267,8 +275,14 @@ export function PDFTools({ files, onFilesChange, onWatermarkChange, onToolSelect
 
       if (!response.ok) {
         clearInterval(progressInterval)
-        const error = await response.json()
-        throw new Error(error.error || 'Operation failed')
+        let errorMessage = 'Operation failed'
+        try {
+          const error = await response.json()
+          errorMessage = error.error || errorMessage
+        } catch (e) {
+          errorMessage = `${response.status}: ${response.statusText || 'Operation failed'}`
+        }
+        throw new Error(errorMessage)
       }
 
       const blob = await response.blob()
