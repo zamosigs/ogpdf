@@ -14,7 +14,11 @@ if (typeof Promise.withResolvers === 'undefined') {
 
 const nextConfig = {
   experimental: {
-    serverComponentsExternalPackages: ['sharp', 'canvas', 'pdf-lib']
+    serverComponentsExternalPackages: ['sharp', 'canvas', 'pdf-lib', 'jszip', 'tesseract.js']
+  },
+  serverRuntimeConfig: {
+    // Increase memory for serverless functions
+    maxDuration: 60,
   },
   webpack: (config, { isServer }) => {
     config.resolve.alias.canvas = false;
@@ -23,6 +27,11 @@ const nextConfig = {
     // PDF.js configuration
     if (!isServer) {
       config.resolve.alias['pdfjs-dist'] = require.resolve('pdfjs-dist');
+    }
+    
+    // Sharp configuration for serverless
+    if (isServer) {
+      config.externals.push('sharp');
     }
     
     return config;

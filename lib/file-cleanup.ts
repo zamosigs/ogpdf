@@ -1,7 +1,11 @@
 import fs from 'fs'
 import path from 'path'
+import os from 'os'
 
-const TEMP_DIR = path.join(process.cwd(), 'temp')
+// Use /tmp for serverless environments (Vercel, AWS Lambda, etc.)
+const TEMP_DIR = process.env.VERCEL 
+  ? '/tmp' 
+  : path.join(process.cwd(), 'temp')
 const CLEANUP_INTERVAL = 60 * 60 * 1000 // 1 hour in milliseconds
 
 // Ensure temp directory exists

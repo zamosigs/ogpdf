@@ -30,6 +30,31 @@ This guide provides step-by-step instructions for deploying the OG PDF applicati
 
 Vercel is the easiest way to deploy Next.js applications.
 
+#### Option 1: Deploy via GitHub (Automatic)
+
+1. **Push to GitHub**
+   ```bash
+   git push origin main
+   ```
+
+2. **Connect to Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Vercel will auto-detect Next.js settings
+
+3. **Configure**
+   - Framework Preset: Next.js
+   - Build Command: `npm run build`
+   - Output Directory: `.next`
+   - Install Command: `npm install`
+
+4. **Deploy**
+   - Click "Deploy"
+   - Vercel will automatically build and deploy
+
+#### Option 2: Deploy via CLI
+
 1. **Install Vercel CLI**
    ```bash
    npm i -g vercel
@@ -45,7 +70,28 @@ Vercel is the easiest way to deploy Next.js applications.
    - Set up project settings
    - Deploy
 
-4. **Configure environment variables** (if needed)
+#### Important Vercel Configuration
+
+The project includes a `vercel.json` file with the following settings:
+- **Max Duration**: 60 seconds (for heavy PDF processing)
+- **Memory**: 3008 MB (maximum available)
+- **Node Options**: Increased memory limit for Sharp image processing
+
+#### Troubleshooting Vercel Deployment
+
+If API routes fail on Vercel:
+
+1. **Check Function Logs**
+   - Go to Vercel Dashboard → Your Project → Functions
+   - Click on the failing function
+   - Check error logs
+
+2. **Common Issues**
+   - **Timeout**: Some operations take longer than 10s default. Vercel.json sets 60s max.
+   - **Memory**: Sharp and PDF processing need more memory. Vercel.json sets 3008MB.
+   - **Missing Dependencies**: Ensure all packages in package.json are installed
+
+3. **Environment Variables** (if needed)
    - Go to Vercel Dashboard
    - Select your project
    - Go to Settings > Environment Variables
