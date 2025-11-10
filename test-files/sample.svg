@@ -1,0 +1,11 @@
+
+    <svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+      <rect width="400" height="300" fill="#f0f0f0" stroke="#333" stroke-width="2"/>
+      <text x="200" y="80" text-anchor="middle" font-family="Arial" font-size="24" font-weight="bold" fill="#333">OG PDF Test Image</text>
+      <text x="200" y="120" text-anchor="middle" font-family="Arial" font-size="16" fill="#333">This is a sample image for testing</text>
+      <text x="200" y="150" text-anchor="middle" font-family="Arial" font-size="16" fill="#333">OCR functionality and image to PDF</text>
+      <text x="200" y="180" text-anchor="middle" font-family="Arial" font-size="16" fill="#333">conversion features.</text>
+      <rect x="50" y="200" width="100" height="60" fill="#4CAF50"/>
+      <circle cx="300" cy="230" r="40" fill="#2196F3"/>
+    </svg>
+  
