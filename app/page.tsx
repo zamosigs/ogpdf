@@ -6,7 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button'
 import { FileUpload } from '@/components/file-upload'
 import { SimplePDFPreview } from '@/components/simple-pdf-preview'
-import { PDFTools } from '@/components/pdf-tools'
 import { FileHistory } from '@/components/file-history'
 import { ThemeToggle } from '@/components/theme-toggle'
 import { LivePDFEditor } from '@/components/live-pdf-editor'
