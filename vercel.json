@@ -3,10 +3,7 @@
   "functions": {
     "app/api/**/*.ts": {
       "maxDuration": 60,
-      "memory": 3008
+      "memory": 1024
     }
-  },
-  "env": {
-    "NODE_OPTIONS": "--max-old-space-size=4096"
   }
 }
