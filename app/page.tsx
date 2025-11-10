@@ -242,51 +242,35 @@ export default function HomePage() {
                 )}
               </div>
 
-              {/* Content Area - Editor and Tools */}
-              <div className="flex flex-col lg:flex-row">
-                {/* Left Side: Editor/Preview */}
-                <div className="flex-1">
-                  {/* Live PDF Editor - Only show for PDF files */}
-                  {selectedFile && selectedFile.type === 'application/pdf' && (
-                    <div className="bg-white dark:bg-slate-800" style={{ height: 'calc(100vh - 122px)' }}>
-                      <LivePDFEditor
-                        file={selectedFile}
-                        allFiles={files}
-                        onSave={(editData) => {
-                          console.log('Saving edit data:', editData)
-                        }}
-                        onPreview={(previewData) => {
-                          console.log('Preview data:', previewData)
-                        }}
-                      />
-                    </div>
-                  )}
+              {/* Content Area - Editor/Preview */}
+              <div>
+                {/* Live PDF Editor - Only show for PDF files */}
+                {selectedFile && selectedFile.type === 'application/pdf' && (
+                  <div className="bg-white dark:bg-slate-800" style={{ height: 'calc(100vh - 122px)' }}>
+                    <LivePDFEditor
+                      file={selectedFile}
+                      allFiles={files}
+                      onSave={(editData) => {
+                        console.log('Saving edit data:', editData)
+                      }}
+                      onPreview={(previewData) => {
+                        console.log('Preview data:', previewData)
+                      }}
+                    />
+                  </div>
+                )}
 
-                  {/* Simple Preview - Show for images and other files */}
-                  {selectedFile && selectedFile.type !== 'application/pdf' && (
-                    <div className="bg-white dark:bg-slate-800" style={{ minHeight: '500px', height: 'calc(100vh - 122px)' }}>
-                      <SimplePDFPreview 
-                        file={selectedFile} 
-                        files={files}
-                        className="h-full" 
-                        watermarkSettings={watermarkSettings} 
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {/* Right Side: Tools Panel */}
-                <div className="lg:w-80 xl:w-96 bg-slate-50 dark:bg-slate-900 border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-700 p-4 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 122px)' }}>
-                  <h3 className="text-lg font-bold mb-4 text-slate-900 dark:text-white flex items-center gap-2">
-                    <Zap className="h-5 w-5 text-primary" />
-                    PDF Tools
-                  </h3>
-                  <PDFTools 
-                    files={files} 
-                    onFilesChange={handleFilesChange}
-                    onWatermarkChange={setWatermarkSettings}
-                  />
-                </div>
+                {/* Simple Preview - Show for images and other files */}
+                {selectedFile && selectedFile.type !== 'application/pdf' && (
+                  <div className="bg-white dark:bg-slate-800" style={{ minHeight: '500px', height: 'calc(100vh - 122px)' }}>
+                    <SimplePDFPreview 
+                      file={selectedFile} 
+                      files={files}
+                      className="h-full" 
+                      watermarkSettings={watermarkSettings} 
+                    />
+                  </div>
+                )}
               </div>
             </div>
           )}
